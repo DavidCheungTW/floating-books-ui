@@ -1,0 +1,12 @@
+.emailVerify {
+  margin: 5px;
+  padding: 5px;
+  background-color: lightcyan;
+  text-decoration: none;
+}
+
+.emailVerify form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}

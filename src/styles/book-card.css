@@ -1,0 +1,66 @@
+.book-card {
+  font-size: small;
+  background-color: rgba(255, 255, 255, 0.7);
+  margin: 10px;
+}
+
+.book-card ul {
+  /* border: 2px lightseagreen solid; */
+  margin: 5px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 110px;
+  box-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 0px 0 #b9b9b9,
+    0 5px 0 rgba(125, 125, 125, 0.2), 0 6px 1px rgba(0, 0, 0, 0.2),
+    0 0 5px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2),
+    0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.2),
+    0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.2),
+    0 0 4px white, 0 0px 3px white, 1px 1px 5px rgba(255, 155, 0, 0.37),
+    1px 1px 10px rgba(102, 60, 0, 0.5);
+}
+
+.book-card:hover {
+  transform: scale(1.05);
+  transition: 0.5s;
+}
+
+.book-card li {
+  display: block;
+  margin: 2px;
+  padding: 0;
+}
+
+.book-image {
+  height: 100px;
+}
+
+.book-card-type {
+  font-style: italic;
+}
+
+.book-card-email {
+  text-align: center;
+  background-color: darkcyan;
+}
+
+.book-card-email a {
+  text-decoration: none;
+  color: white;
+}
+
+.book-card-email a svg {
+  vertical-align: middle;
+}
+
+.button-save .button-remove .button-order {
+  margin: 5px;
+}
+
+.button-save:hover .button-remove:hover .button-order:hover {
+  background-color: rgb(255, 200, 152);
+}
+
+.book-title {
+  font-weight: bolder;
+}

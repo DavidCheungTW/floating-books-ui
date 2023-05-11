@@ -1,0 +1,10 @@
+.view-books {
+  margin: 5px;
+  padding: 5px;
+  background-color: lightcyan;
+}
+
+.book-card-list {
+  display: flex;
+  overflow-x: scroll;
+}

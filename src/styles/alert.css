@@ -1,0 +1,15 @@
+.alert {
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+}
+.alert-success {
+  background-image: linear-gradient(to right, greenyellow, white);
+  border: 0;
+  color: black;
+}
+.alert-fail {
+  background-image: linear-gradient(to right, lightpink, white);
+  border: 0;
+  color: black;
+}

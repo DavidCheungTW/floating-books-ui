@@ -1,0 +1,12 @@
+.create-account {
+  margin: 5px;
+  padding: 5px;
+  background-color: lightcyan;
+  text-decoration: none;
+}
+
+.create-account form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}

@@ -1,0 +1,35 @@
+.signin {
+  margin: 5px;
+  padding: 5px;
+  background-color: lightcyan;
+  /* background-color: rgba(255, 255, 255, 0.5); */
+}
+
+.signin form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.signin a {
+  background-color: rgba(0, 0, 0, 0);
+  text-decoration: none;
+}
+
+.create-account-button {
+  display: block;
+}
+
+.create-account-button:hover {
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.email-verify-button {
+  display: block;
+}
+
+.email-verify-button:hover {
+  font-weight: bolder;
+  text-decoration: underline;
+}
