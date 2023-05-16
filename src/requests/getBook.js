@@ -12,14 +12,20 @@ const getBook = (setBooks, setAlert, query) => {
     .then((response) => {
       setBooks(response.data);
       if (response.data.length === 0) {
-        setAlert({ message: "No book in application, please try again!" });
+        setAlert({
+          message: "No book in application, please try again!",
+          isSuccess: true,
+        });
       } else {
-        setAlert({ message: "" });
+        setAlert({ message: "", isSuccess: false });
       }
     })
     .catch(() => {
       setBooks([]);
-      setAlert({ message: "Book Listings error, please try again!" });
+      setAlert({
+        message: "Book Listings error, please try again!",
+        isSuccess: false,
+      });
     });
 };
 

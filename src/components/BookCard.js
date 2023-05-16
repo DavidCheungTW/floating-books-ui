@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import noCoverImage from "../images/no-cover-image.jpeg";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import "../styles/book-card.css";
 
 const BookCard = ({
@@ -13,6 +16,7 @@ const BookCard = ({
   orderId,
   orderStatus,
   handleSetSelectBook,
+  onUpdateOrder,
 }) => {
   let location = useLocation();
   let { pathname } = location;
@@ -20,6 +24,7 @@ const BookCard = ({
   const fromViewBook = pathname === "/" ? true : false;
   const fromFavourBook = pathname === "/favourite-books" ? true : false;
   const fromOrderBook = pathname === "/order-books" ? true : false;
+  const fromFollowupBook = pathname === "/followup-books" ? true : false;
 
   const {
     id,
@@ -60,11 +65,14 @@ const BookCard = ({
           {/* <li>Genre:{genre.genre}</li> */}
           <li className="book-title">{title}</li>
           <li>{author}</li>
-          {fromOrderBook && <li>{orderStatus}</li>}
+          <li>{releaseDate}</li>
+          {(fromOrderBook || fromFollowupBook) && <li>{orderStatus}</li>}
         </ul>
       </div>
       {fromViewBook && userId && (
-        <button
+        <Button
+          size="small"
+          variant="outlined"
           type="submit"
           className="button-save"
           onClick={() => {
@@ -72,10 +80,13 @@ const BookCard = ({
           }}
         >
           Save
-        </button>
+        </Button>
       )}
       {fromFavourBook && (
-        <button
+        <Button
+          startIcon={<DeleteIcon />}
+          size="small"
+          variant="outlined"
           type="submit"
           className="button-remove"
           onClick={() => {
@@ -83,18 +94,76 @@ const BookCard = ({
           }}
         >
           Remove
-        </button>
+        </Button>
       )}
       {fromFavourBook && (
-        <button
+        <Button
+          size="small"
+          variant="outlined"
           type="submit"
           className="button-order"
           onClick={() => {
-            onOrderBook(userId, id);
+            onOrderBook(userId, book, removeId);
           }}
         >
           Order Now
-        </button>
+        </Button>
+      )}
+
+      {fromFollowupBook && orderStatus === "request" && (
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="button-reject"
+          onClick={() => {
+            onUpdateOrder(orderId, "reject");
+          }}
+        >
+          Reject
+        </Button>
+      )}
+
+      {fromFollowupBook && orderStatus === "request" && (
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="button-accept"
+          onClick={() => {
+            onUpdateOrder(orderId, "accept");
+          }}
+        >
+          Accept
+        </Button>
+      )}
+
+      {fromFollowupBook && orderStatus === "accept" && (
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="button-delivered"
+          onClick={() => {
+            onUpdateOrder(orderId, "delivered");
+          }}
+        >
+          Delivered
+        </Button>
+      )}
+
+      {fromOrderBook && orderStatus === "delivered" && (
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="button-received"
+          onClick={() => {
+            onUpdateOrder(orderId, "received", id); // id is bookId
+          }}
+        >
+          Received
+        </Button>
       )}
     </div>
   );

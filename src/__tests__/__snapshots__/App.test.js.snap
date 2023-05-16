@@ -4,9 +4,6 @@ exports[`App Renders as expected 1`] = `
 <div
   className="App"
 >
-  <h1>
-    Floating Books UI
-  </h1>
   <div
     className="show-user-id"
   >
@@ -20,57 +17,54 @@ exports[`App Renders as expected 1`] = `
     <ul
       className="navbar-links"
     >
-      <li
-        className="navbar-links-item"
+      <a
+        className="item"
+        href="/"
+        onClick={[Function]}
       >
-        <a
-          className="item"
-          href="/"
-          onClick={[Function]}
-        >
-          View Books
-        </a>
-      </li>
-      <li
-        className="navbar-links-item"
+        View Books
+      </a>
+      <a
+        className="item"
+        href="/favourite-books"
+        onClick={[Function]}
       >
-        <a
-          className="item"
-          href="/favourite-books"
-          onClick={[Function]}
-        >
-          Favourite Books
-        </a>
-      </li>
-      <li
-        className="navbar-links-item"
+        Favourite Books
+      </a>
+      <a
+        className="item"
+        href="/order-books"
+        onClick={[Function]}
       >
-        <a
-          className="item"
-          href="/order-books"
-          onClick={[Function]}
-        >
-          Order Books
-        </a>
-      </li>
-      <li
-        className="navbar-links-item"
+        Order Books
+      </a>
+      <a
+        className="item"
+        href="/register-book"
+        onClick={[Function]}
       >
-        <a
-          className="item"
-          href="/register-book"
-          onClick={[Function]}
-        >
-          Register a Book
-        </a>
-      </li>
+        Register Book
+      </a>
       <li
         className="navbar-links-item signin-button"
       >
         <a
-          className="item"
+          className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall item css-1k23hlb-MuiButtonBase-root-MuiButton-root"
           href="/signin"
+          onBlur={[Function]}
           onClick={[Function]}
+          onContextMenu={[Function]}
+          onDragLeave={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
+          onTouchMove={[Function]}
+          onTouchStart={[Function]}
+          tabIndex={0}
         >
           Sign in
         </a>
@@ -90,37 +84,90 @@ exports[`App Renders as expected 1`] = `
           className="search-form"
           onSubmit={[Function]}
         >
-          <input
-            id="searchText"
-            name="searchText"
-            onChange={[Function]}
-            placeholder="Search by title"
-            type="text"
-            value=""
-          />
+          <div
+            className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-q0jhri-MuiInputBase-root-MuiInput-root"
+            onClick={[Function]}
+          >
+            <input
+              className="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+              id="searchText"
+              name="searchText"
+              onAnimationStart={[Function]}
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              placeholder="Search by title"
+              type="text"
+              value=""
+            />
+          </div>
           <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall css-1k23hlb-MuiButtonBase-root-MuiButton-root"
+            disabled={false}
+            onBlur={[Function]}
+            onContextMenu={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
             type="submit"
           >
-            <svg
-              fill="currentColor"
-              height="1em"
-              stroke="currentColor"
-              strokeWidth="0"
-              style={
-                Object {
-                  "color": undefined,
-                }
-              }
-              viewBox="0 0 1024 1024"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1014.64 969.04L703.71 656.207c57.952-69.408 92.88-158.704 92.88-256.208 0-220.912-179.088-400-400-400s-400 179.088-400 400 179.088 400 400 400c100.368 0 192.048-37.056 262.288-98.144l310.496 312.448c12.496 12.497 32.769 12.497 45.265 0 12.48-12.496 12.48-32.752 0-45.263zM396.59 736.527c-185.856 0-336.528-150.672-336.528-336.528S210.734 63.471 396.59 63.471c185.856 0 336.528 150.672 336.528 336.528S582.446 736.527 396.59 736.527z"
-              />
-            </svg>
+            Search
           </button>
         </form>
+        <ul
+          className="sortGroup"
+        >
+          <a
+            className="item"
+            href="/?sort={\\"title\\":1}"
+            onClick={[Function]}
+          >
+            Title Ascending
+          </a>
+          <a
+            className="item"
+            href="/?sort={\\"title\\":-1}"
+            onClick={[Function]}
+          >
+            Title Descending
+          </a>
+          <a
+            className="item"
+            href="/?sort={\\"author\\":1}"
+            onClick={[Function]}
+          >
+            Author Ascending
+          </a>
+          <a
+            className="item"
+            href="/?sort={\\"author\\":-1}"
+            onClick={[Function]}
+          >
+            Author Descending
+          </a>
+          <a
+            className="item"
+            href="/?sort={\\"releaseDate\\":1}"
+            onClick={[Function]}
+          >
+            Release Date Ascending
+          </a>
+          <a
+            className="item"
+            href="/?sort={\\"releaseDate\\":-1}"
+            onClick={[Function]}
+          >
+            Release Date Descending
+          </a>
+        </ul>
       </div>
     </div>
     <div

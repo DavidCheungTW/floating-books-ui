@@ -8,15 +8,16 @@ const getFavouriteBooks = (id, setBooks, setAlert) => {
     .then((response) => {
       setBooks(response.data);
       if (response.data.length === 0) {
-        setAlert({ message: "No favourite book!" });
+        setAlert({ message: "No favourite book!", isSuccess: true });
       } else {
-        setAlert({ message: "" });
+        setAlert({ message: "", isSuccess: true });
       }
     })
     .catch(() => {
       setBooks([]);
       setAlert({
         message: "Get error, please try again later!",
+        isSuccess: false,
       });
     });
 };

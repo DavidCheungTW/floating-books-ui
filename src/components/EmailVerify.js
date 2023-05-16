@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import updateUser from "../requests/updateUser";
 import Alert from "./Alert";
+import { Button, Input } from "@mui/material";
 import "../styles/email-verify.css";
 
 const EmailVerify = ({ userList, updateUserList }) => {
@@ -23,6 +24,14 @@ const EmailVerify = ({ userList, updateUserList }) => {
     const { userName, verifyCode } = fields;
 
     const userRows = userList.filter((a) => a.userName === userName);
+
+    if (!userName || !verifyCode) {
+      setAlert({
+        message: "Please input missing fields!",
+        isSuccess: false,
+      });
+      return;
+    }
 
     if (userRows.length === 0) {
       setAlert({
@@ -55,13 +64,10 @@ const EmailVerify = ({ userList, updateUserList }) => {
   return (
     <div className="emailVerify">
       <h2>Email Verification</h2>
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
       <form onSubmit={handleSubmit}>
         <label htmlFor="userName">
           User Name
-          <input
+          <Input
             type="email"
             id="userName"
             name="userName"
@@ -74,7 +80,7 @@ const EmailVerify = ({ userList, updateUserList }) => {
 
         <label htmlFor="verifyCode">
           Verify Code
-          <input
+          <Input
             type="text"
             id="verifyCode"
             name="verifyCode"
@@ -83,10 +89,18 @@ const EmailVerify = ({ userList, updateUserList }) => {
             className="emailVerify-input-verifyCode"
           />
         </label>
-        <button type="submit" className="emailVerify-button-submit">
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="emailVerify-button-submit"
+        >
           Verify Email!
-        </button>
+        </Button>
       </form>
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
+      )}
     </div>
   );
 };

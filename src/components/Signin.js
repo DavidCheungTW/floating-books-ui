@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
 import Alert from "./Alert";
+import { Input, Button } from "@mui/material";
 import "../styles/signin.css";
 
 const Signin = ({ onSetUser, userList, updateUserList }) => {
+  let navigate = useNavigate();
   const init = {
     fields: {
-      userName: "",
+      email: "",
       password: "",
     },
   };
@@ -22,38 +24,27 @@ const Signin = ({ onSetUser, userList, updateUserList }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const { userName, password } = fields;
+    const { email, password } = fields;
 
-    // ================
-    const userRows = userList.filter((a) => a.userName === userName);
-
-    if (userRows.length === 0) {
+    if (!email || !password) {
       setAlert({
-        message: "Please Register!",
+        message: "Please input missing fields!",
         isSuccess: false,
       });
       return;
     }
 
-    if (!userRows[0].emailVerified) {
-      setAlert({
-        message: "Please verify email first!",
-        isSuccess: false,
-      });
-      return;
-    }
-
-    // ================
-
-    signInWithEmailAndPassword(auth, userName, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        onSetUser(userCredential.user.email);
+        const { user } = userCredential;
+        localStorage.setItem("firebaseToken", user.accessToken);
+        onSetUser(user.displayName);
         setAlert({
           message: "Welcome to Floating Books!",
           isSuccess: true,
         });
         setFields(init.fields);
-        // navigate("/");
+        navigate("/");
       })
       .catch((error) => {
         setAlert({
@@ -66,17 +57,14 @@ const Signin = ({ onSetUser, userList, updateUserList }) => {
   return (
     <div className="signin">
       <h2>Sign in</h2>
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="userName">
-          User Name
-          <input
+        <label htmlFor="email">
+          Email address
+          <Input
             type="email"
-            id="userName"
-            name="userName"
-            value={fields.userName}
+            id="email"
+            name="email"
+            value={fields.email}
             onChange={handleChange}
             placeholder="john.smith@email.co.uk"
             className="signin-input-email"
@@ -85,7 +73,7 @@ const Signin = ({ onSetUser, userList, updateUserList }) => {
 
         <label htmlFor="password">
           Password
-          <input
+          <Input
             type="password"
             id="password"
             name="password"
@@ -94,16 +82,36 @@ const Signin = ({ onSetUser, userList, updateUserList }) => {
             className="signin-input-password"
           />
         </label>
-        <button type="submit" className="signin-button-submit">
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="signin-button-submit"
+        >
           Sign in!
-        </button>
+        </Button>
       </form>
-      <Link className="create-account-button" to="create-account">
+      <Button
+        component={Link}
+        size="small"
+        variant="outlined"
+        className="create-account-button"
+        to="create-account"
+      >
         Sign up now !
-      </Link>
-      <Link className="email-verify-button" to="email-verify">
+      </Button>
+      <Button
+        component={Link}
+        size="small"
+        variant="outlined"
+        className="email-verify-button"
+        to="email-verify"
+      >
         Email Verify !
-      </Link>
+      </Button>
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
+      )}
     </div>
   );
 };

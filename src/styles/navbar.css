@@ -5,32 +5,32 @@
   padding: 0;
 }
 
-.navbar-links-item {
+/* .navbar-links-item {
   display: block;
-}
+} */
 
-.navbar-links-item .item {
-  text-decoration: none;
-  /* border: 1px darkcyan solid; */
-  /* padding: 10px; */
-  /* border-radius: 10px; */
-  /* background-color: lightpink; */
-}
+/* .navbar-links-item .item {
+  text-decoration: none; */
+/* border: 1px darkcyan solid; */
+/* padding: 10px; */
+/* border-radius: 10px; */
+/* background-color: lightpink; */
+/* }
 
 .navbar-links-item .item:hover {
   font-weight: bold;
   text-decoration: underline;
-}
+} */
 
-.signin-button .item {
+/* .signin-button .item {
   background-color: darkblue;
 }
 
 .signin-button a {
   color: white;
-}
+} */
 
-.signout-button {
+/* .signout-button {
   color: white;
   background-color: blueviolet;
-}
+} */

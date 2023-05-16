@@ -20,10 +20,10 @@
     1px 1px 10px rgba(102, 60, 0, 0.5);
 }
 
-.book-card:hover {
+/* .book-card:hover {
   transform: scale(1.05);
   transition: 0.5s;
-}
+} */
 
 .book-card li {
   display: block;

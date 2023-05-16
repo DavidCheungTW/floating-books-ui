@@ -37,7 +37,7 @@ const ViewBooks = ({ handleSetSelectBook, userId }) => {
 
   useEffect(() => {
     if (userId) {
-      getFavouriteBooks(userId, setFavourites, setAlert);
+      getFavouriteBooks(userId, setFavourites, () => {});
     }
   }, [userId]);
 
@@ -65,9 +65,6 @@ const ViewBooks = ({ handleSetSelectBook, userId }) => {
       </div>
       <div className="column right">
         {/* View Books */}
-        {alert.message && (
-          <Alert message={alert.message} isSuccess={alert.isSuccess} />
-        )}
         {!alert.message && books.length > 0 && (
           <div className="book-card-list">
             {books.map((book) => (
@@ -82,10 +79,14 @@ const ViewBooks = ({ handleSetSelectBook, userId }) => {
                   orderId={isZero}
                   orderStatus={""}
                   handleSetSelectBook={handleSetSelectBook}
+                  onUpdateOrder={nullFunction}
                 />
               </div>
             ))}
           </div>
+        )}
+        {alert.message && (
+          <Alert message={alert.message} isSuccess={alert.isSuccess} />
         )}
       </div>
     </div>

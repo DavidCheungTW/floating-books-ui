@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { Input, Button } from "@mui/material";
 import addUser from "../requests/addUser";
 import sendEmail from "../requests/sendEmail";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  getAuth,
+  deleteUser,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 import Alert from "./Alert";
 import "../styles/create-account.css";
@@ -14,6 +21,7 @@ const CreateAccount = ({ onSetUser }) => {
       lastName: "",
       userName: "",
       postalAddress: "",
+      email: "",
       password: "",
       confirmPassword: "",
     },
@@ -32,6 +40,7 @@ const CreateAccount = ({ onSetUser }) => {
       lastName,
       userName,
       postalAddress,
+      email,
       password,
       confirmPassword,
     } = fields;
@@ -41,6 +50,7 @@ const CreateAccount = ({ onSetUser }) => {
       !lastName ||
       !userName ||
       !postalAddress ||
+      !email ||
       !password ||
       !confirmPassword
     ) {
@@ -72,45 +82,74 @@ const CreateAccount = ({ onSetUser }) => {
       isSuccess: false,
     });
 
-    const formData = {};
-    formData.firstName = firstName;
-    formData.lastName = lastName;
-    formData.userName = userName;
-    formData.postalAddress = postalAddress;
-    formData.verifyCode = Math.random().toString(36).substring(2, 6);
-    // formData.emailVerified = true;
-
-    addUser(formData, setAlert);
-
-    // axios
-    //   .post("http://localhost:4000/users", formData)
-    //   .then(() => {
-    //     setAlert({
-    //       message: "User is registered, please sign in now",
-    //       isSuccess: true,
-    //     });
-    //     // setFields(init.fields);
-    //   })
-    //   .catch((error) => {
-    //     let errMsg;
-    //     if (error.response.data.errors.length > 0) {
-    //       errMsg = error.response.data.errors[0].message;
-    //     } else {
-    //       errMsg = "System Error, please try later!";
-    //     }
-    //     setAlert({
-    //       message: `${errMsg}`,
-    //       isSuccess: false,
-    //     });
-    //   });
-
-    createUserWithEmailAndPassword(auth, userName, password)
+    // ===== begin: add firebase authentication =====================
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // onSetUser(userCredential.user.email);
-        setAlert({
-          message: "User is registered, please sign in now",
-          isSuccess: true,
-        });
+        updateProfile(userCredential.user, { displayName: userName })
+          .then((userCredential) => {
+            // onSetUser(userCredential.user.email);
+            onSetUser(userName);
+            // setAlert({
+            //   message: "User is registered, please sign in now",
+            //   isSuccess: true,
+            // });
+            // ===== begin: add records to user table =====================
+            const formData = {};
+            formData.firstName = firstName;
+            formData.lastName = lastName;
+            formData.userName = userName;
+            formData.postalAddress = postalAddress;
+            formData.verifyCode = Math.random().toString(36).substring(2, 6);
+            // addUser(formData, setAlert);
+            axios
+              .post("http://localhost:4000/users", formData)
+              .then(() => {
+                setAlert({
+                  message: "User is registered, please sign in now",
+                  isSuccess: true,
+                });
+                setFields(init.fields);
+              })
+              .catch((error) => {
+                // let errMsg;
+                // if (error.response.data.errors.length > 0) {
+                //   errMsg = error.response.data.errors[0].message;
+                // } else {
+                //   errMsg = "System Error, please try later!";
+                // }
+                // setAlert({
+                //   message: `${errMsg}`,
+                //   isSuccess: false,
+                // });
+                // === begin : remove firebase account
+                const auth = getAuth();
+                deleteUser(auth.currentUser).catch((error) => {
+                  setAlert({
+                    message: `Remove account fail - ${error.message}`,
+                    isSuccess: false,
+                  });
+                });
+                // === end : remove firebase account
+              });
+          })
+          // ===== end: add records to user table =====================
+          // ===== begin : send email =============
+          // const emailData = {};
+          // emailData.from = "";
+          // emailData.to = userName;
+          // emailData.subject = "Thank you, you are registed in Floating Books!";
+          // emailData.text = `Dear ${firstName},${lastName}, Thank you for your registation! Please activiate your account with verifiy code ${formData.verifyCode}. Sincerely, Floating Books Admin `;
+          // sendEmail(emailData, setAlert);
+          // ===== end : send email =============
+          .catch((error) => {
+            const auth = getAuth();
+            deleteUser(auth.currentUser).catch((error) => {
+              setAlert({
+                message: `Remove account fail - ${error.message}`,
+                isSuccess: false,
+              });
+            });
+          });
       })
       .catch((error) => {
         setAlert({
@@ -119,25 +158,16 @@ const CreateAccount = ({ onSetUser }) => {
         });
       });
 
-    const emailData = {};
-    emailData.from = "";
-    emailData.to = userName;
-    emailData.subject = "Thank you, you are registed in Floating Books!";
-    emailData.text = `Dear ${firstName},${lastName}, Thank you for your registation! Please activiate your account with verifiy code ${formData.verifyCode}. Sincerely, Floating Books Admin `;
-
-    sendEmail(emailData, setAlert);
+    // ===== end : add firebase authentication =====================
   };
 
   return (
     <div className="create-account">
       <h2>Create Account</h2>
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
       <form onSubmit={handleSubmit}>
         <label htmlFor="firstName">
           First Name
-          <input
+          <Input
             type="text"
             id="firstName"
             name="firstName"
@@ -149,7 +179,7 @@ const CreateAccount = ({ onSetUser }) => {
 
         <label htmlFor="lastName">
           Last Name
-          <input
+          <Input
             type="text"
             id="lastName"
             name="lastName"
@@ -161,20 +191,19 @@ const CreateAccount = ({ onSetUser }) => {
 
         <label htmlFor="userName">
           User Name
-          <input
-            type="email"
+          <Input
+            type="text"
             id="userName"
             name="userName"
             value={fields.userName}
             onChange={handleFieldChange}
-            placeholder="john.smith@email.co.uk"
-            className="input-email"
+            className="input-text"
           />
         </label>
 
         <label htmlFor="postalAddress">
           Postal Address
-          <input
+          <Input
             type="text"
             id="postalAddress"
             name="postalAddress"
@@ -184,9 +213,22 @@ const CreateAccount = ({ onSetUser }) => {
           />
         </label>
 
+        <label htmlFor="email">
+          Email Address
+          <Input
+            type="email"
+            id="email"
+            name="email"
+            value={fields.email}
+            onChange={handleFieldChange}
+            placeholder="john.smith@email.co.uk"
+            className="input-email"
+          />
+        </label>
+
         <label htmlFor="password">
           Password
-          <input
+          <Input
             type="password"
             id="password"
             name="password"
@@ -198,7 +240,7 @@ const CreateAccount = ({ onSetUser }) => {
 
         <label htmlFor="confirmPassword">
           Confirm Password
-          <input
+          <Input
             type="password"
             id="confirmPassword"
             name="confirmPassword"
@@ -208,10 +250,18 @@ const CreateAccount = ({ onSetUser }) => {
           />
         </label>
 
-        <button type="submit" className="button-submit">
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="button-submit"
+        >
           Sign up now!
-        </button>
+        </Button>
       </form>
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
+      )}
     </div>
   );
 };

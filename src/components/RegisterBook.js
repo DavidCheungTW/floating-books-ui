@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import getGenre from "../requests/getGenre";
 import addBook from "../requests/addBook";
 import Alert from "./Alert";
+import { Input, Button } from "@mui/material";
+import { MuiFileInput } from "mui-file-input";
 import "../styles/register-book.css";
 
 const formatDate = (date) => {
@@ -18,7 +20,7 @@ const formatDate = (date) => {
   return [year, month, day].join("-");
 };
 
-const RegisterBook = ({ loginID, userId }) => {
+const RegisterBook = ({ displayName, userId }) => {
   const [genreList, setGenreList] = useState([]);
   const [alert, setAlert] = useState({ message: "", isSuccess: true });
 
@@ -53,9 +55,9 @@ const RegisterBook = ({ loginID, userId }) => {
   const handleRegisterBook = async (event) => {
     event.preventDefault();
 
-    if (!loginID) {
+    if (!displayName) {
       setAlert({
-        message: "Please login before register a book!",
+        message: "Please login before register book!",
         isSuccess: false,
       });
       return;
@@ -98,10 +100,7 @@ const RegisterBook = ({ loginID, userId }) => {
 
   return (
     <div className="register-book">
-      Register a book
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
+      Register Book
       <form className="register-book-form" onSubmit={handleRegisterBook}>
         <label htmlFor="selectGenre">
           Genre:
@@ -121,7 +120,7 @@ const RegisterBook = ({ loginID, userId }) => {
         </label>
         <label htmlFor="title">
           Title:
-          <input
+          <Input
             type="text"
             id="title"
             name="title"
@@ -132,7 +131,7 @@ const RegisterBook = ({ loginID, userId }) => {
         </label>
         <label htmlFor="author">
           Author:
-          <input
+          <Input
             type="text"
             id="author"
             name="author"
@@ -143,7 +142,7 @@ const RegisterBook = ({ loginID, userId }) => {
         </label>
         <label htmlFor="releaseDate">
           Release Date:
-          <input
+          <Input
             type="date"
             id="releaseDate"
             name="releaseDate"
@@ -154,7 +153,7 @@ const RegisterBook = ({ loginID, userId }) => {
         </label>
         <label htmlFor="ISBN">
           ISBN:
-          <input
+          <Input
             type="text"
             id="ISBN"
             name="ISBN"
@@ -165,7 +164,7 @@ const RegisterBook = ({ loginID, userId }) => {
         </label>
         <label htmlFor="comment">
           Comment:
-          <input
+          <Input
             type="text"
             id="comment"
             name="comment"
@@ -176,8 +175,8 @@ const RegisterBook = ({ loginID, userId }) => {
         </label>
 
         <label htmlFor="image">
-          Image:
-          <input
+          {/* Image: */}
+          <Input
             type="file"
             id="image"
             name="image"
@@ -185,10 +184,18 @@ const RegisterBook = ({ loginID, userId }) => {
             className="input-file"
           />
         </label>
-        <button type="submit" className="button-register">
+        <Button
+          size="small"
+          variant="outlined"
+          type="submit"
+          className="button-register"
+        >
           Register
-        </button>
+        </Button>
       </form>
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
+      )}
     </div>
   );
 };

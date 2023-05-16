@@ -1,16 +1,16 @@
 import axios from "axios";
 
-const updateOrder = (id, newStatus, setAlert) => {
-  const endpoint = `http://localhost:4000/orders/${id}`;
+const updateBook = (bookId, userId, setAlert) => {
+  const endpoint = `http://localhost:4000/books/${bookId}`;
 
   const formData = {};
-  formData.status = newStatus;
+  formData.ownerId = userId;
 
   return axios
     .patch(endpoint, formData)
     .then(() => {
       setAlert({
-        message: "Order status is updated.",
+        message: "Book owner is updated.",
         isSuccess: true,
       });
     })
@@ -22,4 +22,4 @@ const updateOrder = (id, newStatus, setAlert) => {
     });
 };
 
-export default updateOrder;
+export default updateBook;

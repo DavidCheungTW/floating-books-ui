@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import qs from "qs";
-import { SlMagnifier } from "react-icons/sl";
+// import { SlMagnifier } from "react-icons/sl";
+import { Input, Button } from "@mui/material";
 import "../styles/side-bar.css";
 
 const SideBar = () => {
@@ -13,13 +14,18 @@ const SideBar = () => {
     const currentQuery = qs.parse(search, {
       ignoreQueryPrefix: true,
     });
-    const newQuery = {
-      ...currentQuery,
-      [operation]: JSON.stringify({
-        ...JSON.parse(currentQuery[operation] || "{}"),
-        ...valueObj,
-      }),
-    };
+    // const newQuery = {
+    //   ...currentQuery,
+    //   [operation]: JSON.stringify({
+    //     ...JSON.parse(currentQuery[operation] || "{}"),
+    //     ...valueObj,
+    //   }),
+    // };
+    const newQuery =
+      operation === "sort"
+        ? { ...currentQuery, [operation]: JSON.stringify({ ...valueObj }) }
+        : { [operation]: JSON.stringify({ ...valueObj }) };
+
     const newSearch = qs.stringify(newQuery, {
       addQueryPrefix: true,
       encode: false,
@@ -29,6 +35,7 @@ const SideBar = () => {
 
   const handleSearch = (event) => {
     event.preventDefault();
+
     const searchQuery = buildQueryString("query", {
       title: searchText,
     });
@@ -38,7 +45,7 @@ const SideBar = () => {
   return (
     <div className="side-bar">
       <form className="search-form" onSubmit={handleSearch}>
-        <input
+        <Input
           type="text"
           id="searchText"
           name="searchText"
@@ -46,9 +53,10 @@ const SideBar = () => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <button type="submit">
-          <SlMagnifier />
-        </button>
+        <Button size="small" variant="outlined" type="submit">
+          {/* <SlMagnifier /> */}
+          Search
+        </Button>
       </form>
       {/* <ul className="side-bar-links">
         <h5>Filter by City:</h5>
@@ -62,26 +70,34 @@ const SideBar = () => {
             </li>
           ))}
         </div>
-
-        <h5>Sort by:</h5>
-        <div className="sortGroup">
-          <li className="side-bar-links-item">
-            <Link className="item" to={buildQueryString("sort", { price: 1 })}>
-              Price Ascending
-            </Link>
-          </li>
-          <li className="side-bar-links-item">
-            <Link className="item" to={buildQueryString("sort", { price: -1 })}>
-              Price Descending
-            </Link>
-          </li>
-        </div>
-
-        <p>
-          [ENV:
-          <b>{process.env.REACT_APP_ENVIRONMENT}</b>]
-        </p>
-      </ul> */}
+        <h5>Sort by:</h5> */}
+      <ul className="sortGroup">
+        <Link className="item" to={buildQueryString("sort", { title: 1 })}>
+          Title Ascending
+        </Link>
+        <Link className="item" to={buildQueryString("sort", { title: -1 })}>
+          Title Descending
+        </Link>
+        <Link className="item" to={buildQueryString("sort", { author: 1 })}>
+          Author Ascending
+        </Link>
+        <Link className="item" to={buildQueryString("sort", { author: -1 })}>
+          Author Descending
+        </Link>
+        <Link
+          className="item"
+          to={buildQueryString("sort", { releaseDate: 1 })}
+        >
+          Release Date Ascending
+        </Link>
+        <Link
+          className="item"
+          to={buildQueryString("sort", { releaseDate: -1 })}
+        >
+          Release Date Descending
+        </Link>
+      </ul>
+      {/* </ul> */}
     </div>
   );
 };

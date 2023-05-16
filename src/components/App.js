@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useInsertionEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./NavBar";
 import ViewBooks from "./ViewBooks";
@@ -6,31 +6,51 @@ import BookDetails from "./BookDetails";
 import RegisterBook from "./RegisterBook";
 import FavouriteBooks from "./FavouriteBooks";
 import OrderBooks from "./OrderBooks";
+import FollowupBooks from "./FollowupBooks";
 import Signin from "./Signin";
 import CreateAccount from "./CreateAccount";
 import EmailVerify from "./EmailVerify";
-import { signOut } from "firebase/auth";
+import {
+  signOut,
+  getAuth,
+  deleteUser,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 import Alert from "./Alert";
-import getUser from "../requests/getUser";
+import getUserByName from "../requests/getUserByName";
 import "../styles/app.css";
 
 const App = () => {
-  const [loginID, setLoginID] = useState();
+  const [displayName, setDisplayName] = useState(); //user.userName
   const [userList, setUserList] = useState([]);
-  const [userId, setUserId] = useState();
-  const [selectBook, setSelectBook] = useState("");
+  const [userId, setUserId] = useState(); //user.id
+  const [selectBook, setSelectBook] = useState(""); // one book is clicked
   const [alert, setAlert] = useState({ message: "", isSuccess: true });
 
+  // ===== begin add firebase
+  const [user, setUser] = useState(null);
+
+  useInsertionEffect(() => {
+    onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+  //===== end add firebase
+
   useEffect(() => {
-    getUser(setUserList);
-    if (loginID && userList.length > 0) {
-      const userRows = userList.filter((a) => a.userName === loginID);
+    getUserByName(displayName, setUserList);
+    if (displayName && userList.length > 0) {
+      const userRows = userList.filter((a) => a.userName === displayName);
       if (userRows.length > 0) {
         setUserId(userRows[0].id);
       }
     }
-  }, [loginID, userList]);
+  }, [displayName]);
 
   const updateUserList = (ul) => {
     setUserList(ul);
@@ -41,13 +61,14 @@ const App = () => {
   };
 
   const handleLogin = (id) => {
-    setLoginID(id);
+    setDisplayName(id);
   };
 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        setLoginID();
+        localStorage.removeItem("firebaseToken");
+        setDisplayName();
         setUserId();
       })
       .catch((error) => {
@@ -58,16 +79,39 @@ const App = () => {
       });
   };
 
+  // const handleRemove = () => {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+
+  //   deleteUser(user)
+  //     .then(() => {
+  //       setAlert({
+  //         message: "account is removed!",
+  //         isSuccess: true,
+  //       });
+  //       setDisplayName();
+  //       setUserId();
+  //     })
+  //     .catch((error) => {
+  //       setAlert({
+  //         message: `Remove account fail - ${error.message}`,
+  //         isSuccess: false,
+  //       });
+  //     });
+  // };
+
   return (
     <div className="App">
-      <h1>Floating Books UI</h1>
+      {/* <h1>Floating Books UI</h1> */}
       <div className="show-user-id">
-        User ID: {loginID} ({userId})
+        User ID: {displayName} ({userId})
       </div>
-      <NavBar loginID={loginID} onLogin={handleLogin} onLogout={handleLogout} />
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
+      <NavBar
+        displayName={displayName}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        // onRemove={handleRemove}
+      />
       <Routes>
         <Route
           path="/"
@@ -84,14 +128,14 @@ const App = () => {
         />
         <Route
           path="register-book"
-          element={<RegisterBook loginID={loginID} userId={userId} />}
+          element={<RegisterBook displayName={displayName} userId={userId} />}
         />
         <Route
           path="favourite-books"
           element={
             <FavouriteBooks
               handleSetSelectBook={handleSetSelectBook}
-              loginID={loginID}
+              displayName={displayName}
               userId={userId}
             />
           }
@@ -101,7 +145,17 @@ const App = () => {
           element={
             <OrderBooks
               handleSetSelectBook={handleSetSelectBook}
-              loginID={loginID}
+              displayName={displayName}
+              userId={userId}
+            />
+          }
+        />
+        <Route
+          path="followup-books"
+          element={
+            <FollowupBooks
+              handleSetSelectBook={handleSetSelectBook}
+              displayName={displayName}
               userId={userId}
             />
           }
@@ -127,6 +181,9 @@ const App = () => {
           }
         />
       </Routes>
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
+      )}
     </div>
   );
 };

@@ -21,7 +21,7 @@ const formatDate = (date) => {
   return [year, month, day].join("-");
 };
 
-const FavouriteBooks = ({ handleSetSelectBook, loginID, userId }) => {
+const FavouriteBooks = ({ handleSetSelectBook, displayName, userId }) => {
   const isZero = 0;
   const nullFunction = () => {};
   const [favourites, setFavourites] = useState([]);
@@ -33,15 +33,20 @@ const FavouriteBooks = ({ handleSetSelectBook, loginID, userId }) => {
   }, [userId]);
 
   useEffect(() => {
-    getOrderBooks(userId, setOrders, () => {});
+    getOrderBooks(setOrders, () => {});
   }, [userId]);
 
   const removeFavouriteBook = (id) => {
     removeFavourite(id, setAlert);
   };
 
-  const orderBook = (userId, bookId) => {
-    const exist = orders.find((order) => order.bookId === bookId);
+  const handleOrderBook = (userId, book, favouriteId) => {
+    const exist = orders.find(
+      (order) =>
+        order.bookId === book.id &&
+        order.status !== "received" &&
+        order.status !== "reject"
+    );
     if (exist) {
       setAlert({
         message: "Book is already ordered.",
@@ -50,14 +55,24 @@ const FavouriteBooks = ({ handleSetSelectBook, loginID, userId }) => {
       return;
     }
 
+    if (book.ownerId === userId) {
+      setAlert({
+        message: "Book is in your place, no need order!",
+        isSuccess: false,
+      });
+      return;
+    }
+
     let formData = {};
     formData.orderDate = formatDate(new Date());
     formData.userId = userId;
-    formData.bookId = bookId;
+    formData.bookId = book.id;
     addOrder(formData, setAlert);
+
+    removeFavourite(favouriteId, setAlert);
   };
 
-  if (!loginID) {
+  if (!displayName) {
     return (
       <div className="favourite-books">
         <h2>Favourite Books</h2>
@@ -69,9 +84,6 @@ const FavouriteBooks = ({ handleSetSelectBook, loginID, userId }) => {
   return (
     <div className="favourite-books">
       Favourite Books
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
       {!alert.message && favourites.length > 0 && (
         <div className="book-card-list">
           {favourites.map((fav) => (
@@ -82,14 +94,18 @@ const FavouriteBooks = ({ handleSetSelectBook, loginID, userId }) => {
                 onSaveBook={nullFunction}
                 removeId={fav.id}
                 onRemoveSaveBook={removeFavouriteBook}
-                onOrderBook={orderBook}
+                onOrderBook={handleOrderBook}
                 orderId={isZero}
                 orderStatus={""}
                 handleSetSelectBook={handleSetSelectBook}
+                onUpdateOrder={nullFunction}
               />
             </div>
           ))}
         </div>
+      )}
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
       )}
     </div>
   );

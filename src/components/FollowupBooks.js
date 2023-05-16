@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import getOrderBooks from "../requests/getOrderBooks";
 import updateOrder from "../requests/updateOrder";
-import updateBook from "../requests/updateBook";
 import Alert from "./Alert";
 import "../styles/order-books.css";
 
-const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
+const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
   const isZero = 0;
   const nullFunction = () => {};
   const [orders, setOrders] = useState([]);
@@ -18,8 +17,8 @@ const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
 
   if (!displayName) {
     return (
-      <div className="order-books">
-        <h2>Order Books</h2>
+      <div className="followup-books">
+        <h2>Follow up Books</h2>
         Please login first
       </div>
     );
@@ -27,23 +26,21 @@ const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
 
   const handleUpdateOrders = (id, newStatus, bookId = 0) => {
     updateOrder(id, newStatus, setAlert);
-    if (newStatus === "received") {
-      // update book.ownerId >> userId
-      updateBook(bookId, userId, setAlert);
-    }
   };
 
-  const myOrderBooks = orders.filter((order) => order.userId === userId);
+  const followupBooks = orders.filter(
+    (order) =>
+      order.book.ownerId === userId &&
+      order.status !== "received" &&
+      order.status !== "reject"
+  );
 
   return (
-    <div className="order-books">
-      Order Books
-      {alert.message && (
-        <Alert message={alert.message} isSuccess={alert.isSuccess} />
-      )}
+    <div className="followup-books">
+      Follow up Books
       {!alert.message && orders.length > 0 && (
         <div className="book-card-list">
-          {myOrderBooks.map((order) => (
+          {followupBooks.map((order) => (
             <div key={order.id}>
               <BookCard
                 book={order.book}
@@ -61,8 +58,11 @@ const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
           ))}
         </div>
       )}
+      {alert.message && (
+        <Alert message={alert.message} isSuccess={alert.isSuccess} />
+      )}
     </div>
   );
 };
 
-export default OrderBooks;
+export default FollowupBooks;
