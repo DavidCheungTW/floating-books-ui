@@ -34,7 +34,17 @@ const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
       emailData.from = "";
       emailData.to = order.user.email;
       emailData.subject = `${order.book.title} request is accepted!`;
-      emailData.text = `Dear ${order.user.userName}, Your book request is accepted. Thank you very much. Sincerely, Floating Books Admin `;
+      let message = `<p style='font-weight:bold;'> Dear ${order.user.userName},</p> Your book request is accepted. Thank you very much. <p style='font-weight:bold;'> Sincerely, Floating Books Admin</p> `;
+      emailData.html = message;
+
+      sendEmail(emailData, setAlert);
+
+      // send email to owner about the address or requestor @@@
+      emailData.to = order.book.owner.email;
+      emailData.subject = `${order.book.title} deliver information details!`;
+      message = `<p style='font-weight:bold;'> Dear ${order.book.owner.userName},</p> Please deliver your book to: <p>TO: ${order.user.firstName},${order.user.lastName} </p> <p>ADDRESS: ${order.user.postalAddress} </p> Thank you very much. <p style='font-weight:bold;'> Sincerely, Floating Books Admin</p> `;
+      emailData.html = message;
+
       sendEmail(emailData, setAlert);
     }
 
@@ -44,7 +54,9 @@ const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
       emailData.from = "";
       emailData.to = order.user.email;
       emailData.subject = `${order.book.title} request is rejected!`;
-      emailData.text = `Dear ${order.user.userName}, Your book request is rejected. Thank you very much. Sincerely, Floating Books Admin `;
+      const message = `<p style='font-weight:bold;'>Dear ${order.user.userName},</p> Your book request is rejected. Thank you very much. <p style='font-weight:bold;'>Sincerely, Floating Books Admin </p>`;
+      emailData.html = message;
+
       sendEmail(emailData, setAlert);
     }
 
@@ -54,7 +66,9 @@ const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
       emailData.from = "";
       emailData.to = order.user.email;
       emailData.subject = `${order.book.title} is already delivered!`;
-      emailData.text = `Dear ${order.user.userName}, Your requested book is already delivered. Thank you very much. Sincerely, Floating Books Admin `;
+      const message = `<p style='font-weight:bold;'>Dear ${order.user.userName}, </p>Your requested book is already delivered. Thank you very much.<p style='font-weight:bold;'> Sincerely, Floating Books Admin </p>`;
+      emailData.html = message;
+
       sendEmail(emailData, setAlert);
     }
   };

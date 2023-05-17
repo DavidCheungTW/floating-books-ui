@@ -34,7 +34,9 @@ const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
     emailData.from = "";
     emailData.to = order.book.owner.email;
     emailData.subject = `${order.book.title} is received. Thank you!`;
-    emailData.text = `Dear ${order.book.owner.userName}, Your book is received by ${order.user.userName}. Thank you very much. Sincerely, Floating Books Admin `;
+    const message = `<p style='font-weight:bold;'> Dear ${order.book.owner.userName}, </p> Your book is received by ${order.user.userName}. Thank you very much. <p style='font-weight:bold;'> Sincerely, Floating Books Admin </p>`;
+    emailData.html = message;
+
     sendEmail(emailData, setAlert);
 
     if (newStatus === "received") {

@@ -138,14 +138,6 @@ const CreateAccount = ({ onSetUser }) => {
               });
           })
           // ===== end: add records to user table =====================
-          // ===== begin : send email =============
-          // const emailData = {};
-          // emailData.from = "";
-          // emailData.to = userName;
-          // emailData.subject = "Thank you, you are registed in Floating Books!";
-          // emailData.text = `Dear ${firstName},${lastName}, Thank you for your registation! Please activiate your account with verifiy code ${formData.verifyCode}. Sincerely, Floating Books Admin `;
-          // sendEmail(emailData, setAlert);
-          // ===== end : send email =============
           .catch((error) => {
             const auth = getAuth();
             deleteUser(auth.currentUser).catch((error) => {

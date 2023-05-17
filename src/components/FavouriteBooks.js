@@ -77,7 +77,8 @@ const FavouriteBooks = ({ handleSetSelectBook, displayName, userId }) => {
     emailData.from = "";
     emailData.to = book.owner.email;
     emailData.subject = `${book.title} is requested, please follow up!`;
-    emailData.text = `Dear ${book.owner.userName}, ${displayName} is requesting your book. Please follow up. Thank you very much. Sincerely, Floating Books Admin `;
+    const message = `<p style='font-weight:bold;'>  Dear ${book.owner.userName}, </p> ${displayName} is requesting your book. Please follow up. Thank you very much. <p style='font-weight:bold;'> Sincerely, Floating Books Admin</p> `;
+    emailData.html = message;
     sendEmail(emailData, setAlert);
   };
 
