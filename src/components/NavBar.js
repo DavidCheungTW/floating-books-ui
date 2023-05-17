@@ -1,27 +1,35 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
+import logo from "../images/logo.jpeg";
 import "../styles/navbar.css";
 
 const NavBar = ({ displayName, onLogin, onLogout }) => {
   return (
     <div className="navbar">
       <ul className="navbar-links">
-        <Link className="item" to="/">
-          View Books
-        </Link>
-        <Link className="item" to="favourite-books">
-          Favourite Books
-        </Link>
-        <Link className="item" to="order-books">
-          Order Books
-        </Link>
-        <Link className="item" to="followup-books">
-          Follow Up Books
-        </Link>
-        <Link className="item" to="register-book">
-          Register Book
-        </Link>
+        <img src={logo} alt="logo" className="logo" height="70px" />
+
+        {displayName !== "admin" && (
+          <>
+            <Link className="item" to="/">
+              View Books
+            </Link>
+            <Link className="item" to="favourite-books">
+              Favourite Books
+            </Link>
+            <Link className="item" to="order-books">
+              Order Books
+            </Link>
+            <Link className="item" to="followup-books">
+              Follow Up Books
+            </Link>
+            <Link className="item" to="register-book">
+              Register Book
+            </Link>
+          </>
+        )}
+
         {!displayName && (
           <li className="navbar-links-item signin-button">
             {/* <Link className="item" to="signin">
@@ -37,6 +45,11 @@ const NavBar = ({ displayName, onLogin, onLogout }) => {
               Sign in
             </Button>
           </li>
+        )}
+        {displayName === "admin" && (
+          <Link className="item" to="add-genre">
+            Add Genre
+          </Link>
         )}
         {displayName && (
           <Button

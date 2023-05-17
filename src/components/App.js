@@ -7,6 +7,7 @@ import RegisterBook from "./RegisterBook";
 import FavouriteBooks from "./FavouriteBooks";
 import OrderBooks from "./OrderBooks";
 import FollowupBooks from "./FollowupBooks";
+import AddGenre from "./AddGenre";
 import Signin from "./Signin";
 import CreateAccount from "./CreateAccount";
 import {
@@ -159,6 +160,7 @@ const App = () => {
             />
           }
         />
+        <Route path="add-genre" element={<AddGenre />} />
         <Route
           path="signin"
           element={

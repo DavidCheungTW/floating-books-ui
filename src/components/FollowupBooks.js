@@ -4,7 +4,7 @@ import getOrderBooks from "../requests/getOrderBooks";
 import updateOrder from "../requests/updateOrder";
 import sendEmail from "../requests/sendEmail";
 import Alert from "./Alert";
-import "../styles/order-books.css";
+import "../styles/followup-books.css";
 
 const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
   const isZero = 0;
