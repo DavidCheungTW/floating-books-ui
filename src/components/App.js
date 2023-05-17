@@ -9,7 +9,6 @@ import OrderBooks from "./OrderBooks";
 import FollowupBooks from "./FollowupBooks";
 import Signin from "./Signin";
 import CreateAccount from "./CreateAccount";
-import EmailVerify from "./EmailVerify";
 import {
   signOut,
   getAuth,
@@ -50,7 +49,7 @@ const App = () => {
         setUserId(userRows[0].id);
       }
     }
-  }, [displayName]);
+  }, [displayName, userList]);
 
   const updateUserList = (ul) => {
     setUserList(ul);
@@ -173,12 +172,6 @@ const App = () => {
         <Route
           path="signin/create-account"
           element={<CreateAccount onSetUser={handleLogin} />}
-        />
-        <Route
-          path="signin/email-verify"
-          element={
-            <EmailVerify userList={userList} updateUserList={updateUserList} />
-          }
         />
       </Routes>
       {alert.message && (

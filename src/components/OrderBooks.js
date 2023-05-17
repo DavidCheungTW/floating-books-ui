@@ -3,6 +3,7 @@ import BookCard from "./BookCard";
 import getOrderBooks from "../requests/getOrderBooks";
 import updateOrder from "../requests/updateOrder";
 import updateBook from "../requests/updateBook";
+import sendEmail from "../requests/sendEmail";
 import Alert from "./Alert";
 import "../styles/order-books.css";
 
@@ -25,8 +26,17 @@ const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
     );
   }
 
-  const handleUpdateOrders = (id, newStatus, bookId = 0) => {
-    updateOrder(id, newStatus, setAlert);
+  const handleUpdateOrders = (order, newStatus, bookId = 0) => {
+    updateOrder(order.id, newStatus, setAlert);
+
+    // send email current owner , book is received @@@
+    const emailData = {};
+    emailData.from = "";
+    emailData.to = order.book.owner.email;
+    emailData.subject = `${order.book.title} is received. Thank you!`;
+    emailData.text = `Dear ${order.book.owner.userName}, Your book is received by ${order.user.userName}. Thank you very much. Sincerely, Floating Books Admin `;
+    sendEmail(emailData, setAlert);
+
     if (newStatus === "received") {
       // update book.ownerId >> userId
       updateBook(bookId, userId, setAlert);
@@ -52,8 +62,7 @@ const OrderBooks = ({ handleSetSelectBook, displayName, userId }) => {
                 removeId={isZero}
                 onRemoveSaveBook={nullFunction}
                 onOrderBook={nullFunction}
-                orderId={order.id}
-                orderStatus={order.status}
+                order={order}
                 handleSetSelectBook={handleSetSelectBook}
                 onUpdateOrder={handleUpdateOrders}
               />

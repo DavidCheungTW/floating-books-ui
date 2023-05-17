@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 import Alert from "./Alert";
 import { Input, Button } from "@mui/material";
@@ -37,6 +40,18 @@ const Signin = ({ onSetUser, userList, updateUserList }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { user } = userCredential;
+
+        if (!user.emailVerified) {
+          setAlert({
+            message: "Please do email verification!",
+            isSuccess: false,
+          });
+          sendEmailVerification(auth.currentUser).catch((error) => {
+            console.error(error.message);
+          });
+          return;
+        }
+
         localStorage.setItem("firebaseToken", user.accessToken);
         onSetUser(user.displayName);
         setAlert({

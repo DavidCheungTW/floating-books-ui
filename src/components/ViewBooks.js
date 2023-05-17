@@ -76,8 +76,7 @@ const ViewBooks = ({ handleSetSelectBook, userId }) => {
                   removeId={isZero}
                   onRemoveSaveBook={nullFunction}
                   onOrderBook={nullFunction}
-                  orderId={isZero}
-                  orderStatus={""}
+                  order={{}}
                   handleSetSelectBook={handleSetSelectBook}
                   onUpdateOrder={nullFunction}
                 />

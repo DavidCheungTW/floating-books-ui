@@ -3,20 +3,12 @@ import axios from "axios";
 const sendEmail = (emailData, setAlert) => {
   const endpoint = "http://localhost:4000/api/email";
 
-  return axios
-    .post(endpoint, emailData)
-    .then(() => {
-      setAlert({
-        message: "Invitation Email is sent!",
-        isSuccess: true,
-      });
-    })
-    .catch(() => {
-      setAlert({
-        message: "Server error. Please try again later.",
-        isSuccess: false,
-      });
+  return axios.post(endpoint, emailData).catch(() => {
+    setAlert({
+      message: "Server error. Please try again later.",
+      isSuccess: false,
     });
+  });
 };
 
 export default sendEmail;

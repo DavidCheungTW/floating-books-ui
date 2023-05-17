@@ -8,6 +8,7 @@ import {
   updateProfile,
   getAuth,
   deleteUser,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
 import Alert from "./Alert";
@@ -88,7 +89,7 @@ const CreateAccount = ({ onSetUser }) => {
         updateProfile(userCredential.user, { displayName: userName })
           .then((userCredential) => {
             // onSetUser(userCredential.user.email);
-            onSetUser(userName);
+            // onSetUser(userName);
             // setAlert({
             //   message: "User is registered, please sign in now",
             //   isSuccess: true,
@@ -99,7 +100,7 @@ const CreateAccount = ({ onSetUser }) => {
             formData.lastName = lastName;
             formData.userName = userName;
             formData.postalAddress = postalAddress;
-            formData.verifyCode = Math.random().toString(36).substring(2, 6);
+            formData.email = email;
             // addUser(formData, setAlert);
             axios
               .post("http://localhost:4000/users", formData)
@@ -130,6 +131,10 @@ const CreateAccount = ({ onSetUser }) => {
                   });
                 });
                 // === end : remove firebase account
+              });
+            signOut(auth) // sign out until email verified
+              .catch((error) => {
+                console.error(error.message);
               });
           })
           // ===== end: add records to user table =====================

@@ -13,8 +13,7 @@ const BookCard = ({
   removeId,
   onRemoveSaveBook,
   onOrderBook,
-  orderId,
-  orderStatus,
+  order,
   handleSetSelectBook,
   onUpdateOrder,
 }) => {
@@ -66,7 +65,7 @@ const BookCard = ({
           <li className="book-title">{title}</li>
           <li>{author}</li>
           <li>{releaseDate}</li>
-          {(fromOrderBook || fromFollowupBook) && <li>{orderStatus}</li>}
+          {(fromOrderBook || fromFollowupBook) && <li>{order.status}</li>}
         </ul>
       </div>
       {fromViewBook && userId && (
@@ -110,56 +109,56 @@ const BookCard = ({
         </Button>
       )}
 
-      {fromFollowupBook && orderStatus === "request" && (
+      {fromFollowupBook && order.status === "request" && (
         <Button
           size="small"
           variant="outlined"
           type="submit"
           className="button-reject"
           onClick={() => {
-            onUpdateOrder(orderId, "reject");
+            onUpdateOrder(order, "reject");
           }}
         >
           Reject
         </Button>
       )}
 
-      {fromFollowupBook && orderStatus === "request" && (
+      {fromFollowupBook && order.status === "request" && (
         <Button
           size="small"
           variant="outlined"
           type="submit"
           className="button-accept"
           onClick={() => {
-            onUpdateOrder(orderId, "accept");
+            onUpdateOrder(order, "accept");
           }}
         >
           Accept
         </Button>
       )}
 
-      {fromFollowupBook && orderStatus === "accept" && (
+      {fromFollowupBook && order.status === "accept" && (
         <Button
           size="small"
           variant="outlined"
           type="submit"
           className="button-delivered"
           onClick={() => {
-            onUpdateOrder(orderId, "delivered");
+            onUpdateOrder(order, "delivered");
           }}
         >
           Delivered
         </Button>
       )}
 
-      {fromOrderBook && orderStatus === "delivered" && (
+      {fromOrderBook && order.status === "delivered" && (
         <Button
           size="small"
           variant="outlined"
           type="submit"
           className="button-received"
           onClick={() => {
-            onUpdateOrder(orderId, "received", id); // id is bookId
+            onUpdateOrder(order, "received", id); // id is bookId
           }}
         >
           Received

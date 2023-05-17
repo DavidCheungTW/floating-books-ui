@@ -4,6 +4,7 @@ import getFavouriteBooks from "../requests/getFavouriteBooks";
 import removeFavourite from "../requests/removeFavourite";
 import addOrder from "../requests/addOrder";
 import getOrderBooks from "../requests/getOrderBooks";
+import sendEmail from "../requests/sendEmail";
 import Alert from "./Alert";
 import "../styles/favourite-books.css";
 
@@ -69,7 +70,15 @@ const FavouriteBooks = ({ handleSetSelectBook, displayName, userId }) => {
     formData.bookId = book.id;
     addOrder(formData, setAlert);
 
-    removeFavourite(favouriteId, setAlert);
+    removeFavourite(favouriteId, () => {});
+
+    // send email to owner, someone order your book, please follow up @@@
+    const emailData = {};
+    emailData.from = "";
+    emailData.to = book.owner.email;
+    emailData.subject = `${book.title} is requested, please follow up!`;
+    emailData.text = `Dear ${book.owner.userName}, ${displayName} is requesting your book. Please follow up. Thank you very much. Sincerely, Floating Books Admin `;
+    sendEmail(emailData, setAlert);
   };
 
   if (!displayName) {
@@ -95,8 +104,7 @@ const FavouriteBooks = ({ handleSetSelectBook, displayName, userId }) => {
                 removeId={fav.id}
                 onRemoveSaveBook={removeFavouriteBook}
                 onOrderBook={handleOrderBook}
-                orderId={isZero}
-                orderStatus={""}
+                order={{}}
                 handleSetSelectBook={handleSetSelectBook}
                 onUpdateOrder={nullFunction}
               />

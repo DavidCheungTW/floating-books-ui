@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 import getOrderBooks from "../requests/getOrderBooks";
 import updateOrder from "../requests/updateOrder";
+import sendEmail from "../requests/sendEmail";
 import Alert from "./Alert";
 import "../styles/order-books.css";
 
@@ -24,8 +25,38 @@ const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
     );
   }
 
-  const handleUpdateOrders = (id, newStatus, bookId = 0) => {
-    updateOrder(id, newStatus, setAlert);
+  const handleUpdateOrders = (order, newStatus, bookId = 0) => {
+    updateOrder(order.id, newStatus, setAlert);
+
+    if (newStatus === "accept") {
+      // send email to requestor, your request is accept @@@
+      const emailData = {};
+      emailData.from = "";
+      emailData.to = order.user.email;
+      emailData.subject = `${order.book.title} request is accepted!`;
+      emailData.text = `Dear ${order.user.userName}, Your book request is accepted. Thank you very much. Sincerely, Floating Books Admin `;
+      sendEmail(emailData, setAlert);
+    }
+
+    if (newStatus === "reject") {
+      // send email to requestor, your request is rejected @@@
+      const emailData = {};
+      emailData.from = "";
+      emailData.to = order.user.email;
+      emailData.subject = `${order.book.title} request is rejected!`;
+      emailData.text = `Dear ${order.user.userName}, Your book request is rejected. Thank you very much. Sincerely, Floating Books Admin `;
+      sendEmail(emailData, setAlert);
+    }
+
+    if (newStatus === "delivered") {
+      // send email to requestor, book is delivered @@@
+      const emailData = {};
+      emailData.from = "";
+      emailData.to = order.user.email;
+      emailData.subject = `${order.book.title} is already delivered!`;
+      emailData.text = `Dear ${order.user.userName}, Your requested book is already delivered. Thank you very much. Sincerely, Floating Books Admin `;
+      sendEmail(emailData, setAlert);
+    }
   };
 
   const followupBooks = orders.filter(
@@ -49,8 +80,7 @@ const FollowupBooks = ({ handleSetSelectBook, displayName, userId }) => {
                 removeId={isZero}
                 onRemoveSaveBook={nullFunction}
                 onOrderBook={nullFunction}
-                orderId={order.id}
-                orderStatus={order.status}
+                order={order}
                 handleSetSelectBook={handleSetSelectBook}
                 onUpdateOrder={handleUpdateOrders}
               />
